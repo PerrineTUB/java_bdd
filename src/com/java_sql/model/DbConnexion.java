@@ -1,14 +1,14 @@
 package com.java_sql.model;
+import com.java_sql.model.Env;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import static com.java_sql.model.Env.*;
+
 public class DbConnexion {
     //Attribut paramètre BDD
-    static final String DB_URL = "jdbc:mysql://localhost/Java?serverTimezone=UTC";
-    static final String USERNAME = "root";
-    static final String PASSWORD = "";
     //Connexion à la BDD
     private static Connection connexion;
     static {

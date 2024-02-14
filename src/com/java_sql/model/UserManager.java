@@ -75,19 +75,17 @@ public class UserManager {
     }
 
     public static User udpateUser (User user){
-        User userUpdate = getUserByMail(user);
+        User userUpdate = new User();
 
         try {
             connexion = DbConnexion.getConnexion();
 
-            String req = "UPDATE users SET nom=?, prenom=?, email=?, password=? WHERE id=?";
+            String req = "UPDATE users SET nom=?, prenom=? WHERE email= ?";
             PreparedStatement preparedStatement = connexion.prepareStatement(req);
 
             preparedStatement.setString(1, user.getNom());
             preparedStatement.setString(2, user.getPrenom());
             preparedStatement.setString(3, user.getEmail());
-            preparedStatement.setString(4, user.getPassword());
-            preparedStatement.setInt(5, user.getId());
 
             int updatedRows = preparedStatement.executeUpdate();
 
@@ -97,6 +95,7 @@ public class UserManager {
 
             preparedStatement.close();
             connexion.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -131,6 +130,37 @@ public class UserManager {
         return userDelete;
     }
 
+    public static User findUser(User user){
+        User verif = new User();
+        try {
+            Statement smt = connexion.createStatement();
+
+            String req = "SELECT id, nom, prenom, email, password FROM users WHERE email = ?";
+
+            PreparedStatement preparedStatement = connexion.prepareStatement(req);
+
+            preparedStatement.setString(1, user.getEmail());
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while(rs.next()){
+                if (rs.getString(1) != null){
+                    verif.setId(rs.getInt("id"));
+                    verif.setNom(rs.getString("nom"));
+                    verif.setPrenom(rs.getString("prenom"));
+                    verif.setEmail(rs.getString("email"));
+                    verif.setPassword(rs.getString("password"));
+                }
+            }
+
+            smt.close();
+            connexion.close();
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return verif;
+    }
 
 }
 
