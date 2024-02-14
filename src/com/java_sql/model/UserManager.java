@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class UserManager {
     private static Connection connexion = DbConnexion.getConnexion();
@@ -125,9 +126,10 @@ public class UserManager {
 
         } catch (Exception e){
             e.printStackTrace();
+            return userDelete = user;
         }
         System.out.println("L'utilisateur " + userDelete.nom + " " + userDelete.prenom + " à bien été supprimé.");
-        return userDelete;
+        return userDelete = null;
     }
 
     public static User findUser(User user){
@@ -160,6 +162,36 @@ public class UserManager {
             e.printStackTrace();
         }
         return verif;
+    }
+
+    public static ArrayList<User> getAllUser(){
+        ArrayList<User> utilisateurs = new ArrayList<>();
+        try {
+            Statement smt = connexion.createStatement();
+
+
+            String req = "SELECT id, nom, prenom, email, password FROM users";
+            PreparedStatement preparedStatement = connexion.prepareStatement(req);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt(1));
+                user.setNom(rs.getString("nom"));
+                user.setPrenom(rs.getString("prenom"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+
+                utilisateurs.add(user);
+            }
+
+            smt.close();
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return utilisateurs;
     }
 
 }
