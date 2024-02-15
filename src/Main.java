@@ -1,7 +1,5 @@
 import com.java_sql.model.*;
 
-import javax.swing.*;
-
 public class Main {
     public static void main(String[] args) {
         User user1 = new User("user1", "user1", "user1@gmail.com", "1234");
@@ -26,6 +24,6 @@ public class Main {
 //                    value.getId(), value.getNom(), value.getPrenom(), value.getEmail());
 //        }
 //        System.out.println("------------------------------------------------------------------");
-        Exemple form = new Exemple(null );
+        FormUser form = new FormUser(null );
     }
 }

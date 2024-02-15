@@ -79,7 +79,7 @@ public class UserManager {
         User userUpdate = new User();
 
         try {
-            connexion = DbConnexion.getConnexion();
+            Statement smt = connexion.createStatement();
 
             String req = "UPDATE users SET nom=?, prenom=? WHERE email= ?";
             PreparedStatement preparedStatement = connexion.prepareStatement(req);
@@ -88,14 +88,16 @@ public class UserManager {
             preparedStatement.setString(2, user.getPrenom());
             preparedStatement.setString(3, user.getEmail());
 
-            int updatedRows = preparedStatement.executeUpdate();
+            int nbrLines = preparedStatement.executeUpdate();
 
-            if (updatedRows > 0) {
-                userUpdate = user;
+            if (nbrLines == 1) {
+                userUpdate.setNom(user.getNom());
+                userUpdate.setPrenom(user.getPrenom());
+                userUpdate.setEmail(user.getEmail());
+                userUpdate.setPassword(user.getPassword());
             }
 
-            preparedStatement.close();
-            connexion.close();
+            smt.close();
 
         } catch (Exception e) {
             e.printStackTrace();
